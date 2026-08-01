@@ -3,19 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>minmakes | Sua Loja de Maquiagens</title>
+    <title>MinMimei | Sua Loja de Maquiagens</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
     <header class="header">
-        <h1 class="logo">minmakes</h1>
-        <nav>
-            <a href="#produtos">Produtos</a>
-            <a href="#sobre">Sobre</a>
-            <a href="#contato">Contato</a>
-        </nav>
+        <h1 class="logo">MinMimei</h1>
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Pesquisar maquiagem..." oninput="applyFilters()">
+        </div>
+
+        <div class="nav-actions">
+            <button class="icon-btn" onclick="toggleModal('favModal', true)">
+                <i class="fas fa-heart"></i>
+                <span id="favBadge" class="badge">0</span>
+            </button>
+            <button class="icon-btn" onclick="toggleModal('cartModal', true)">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartBadge" class="badge">0</span>
+            </button>
+            <button class="icon-btn" onclick="openUserModal()">
+                <i class="fas fa-user"></i>
+                <span id="userNavLabel">Entrar</span>
+            </button>
+        </div>
     </header>
 
     <section class="hero">
@@ -25,35 +40,88 @@
     </section>
 
     <main id="produtos" class="container">
-        <h2 class="section-title">Nossos Produtos</h2>
-        
-        <div class="product-grid" id="productGrid">
+        <div class="filters-bar">
+            <div class="filter-group">
+                <i class="fas fa-filter"></i> Categoria:
+                <select id="categoryFilter" onchange="applyFilters()">
+                    <option value="all">Todas</option>
+                    <option value="boca">Boca</option>
+                    <option value="olhos">Olhos</option>
+                    <option value="rosto">Rosto</option>
+                    <option value="acessorios">Acessórios</option>
+                </select>
             </div>
+            <div class="filter-group">
+                <i class="fas fa-tag"></i> Preço Máximo:
+                <select id="priceFilter" onchange="applyFilters()">
+                    <option value="all">Todos os preços</option>
+                    <option value="40">Até R$ 40,00</option>
+                    <option value="60">Até R$ 60,00</option>
+                    <option value="100">Até R$ 100,00</option>
+                </select>
+            </div>
+        </div>
+
+        <h2 class="section-title">Nossos Produtos</h2>
+        <div class="product-grid" id="productGrid"></div>
+
+        <section id="politicas" class="policy-section">
+            <h3><i class="fas fa-undo-alt"></i> Política de Troca e Devolução</h3>
+            <p>Sua satisfação é a nossa prioridade! Caso precise trocar ou devolver algum item, siga as diretrizes abaixo:</p>
+            <ul>
+                <li><strong>Prazo de Arrependimento:</strong> Você tem até 7 dias corridos após o recebimento para solicitar a devolução.</li>
+                <li><strong>Produtos com Defeito:</strong> Até 30 dias corridos para trocas por defeitos de fabricação.</li>
+                <li><strong>Condições do Produto:</strong> O item deve estar na embalagem original, lacrado e sem sinais de uso.</li>
+            </ul>
+        </section>
     </main>
 
-    <div id="toast" class="toast">Produto adicionado ao carrinho!</div>
+    <div id="cartModal" class="modal-overlay" onclick="closeOnOverlay(event, 'cartModal')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Seu Carrinho <i class="fas fa-shopping-bag"></i></h2>
+                <button class="btn-close" onclick="toggleModal('cartModal', false)">&times;</button>
+            </div>
+            <div id="cartItemsContainer" class="modal-body"></div>
+            <div class="modal-footer">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
+                    <span>Total:</span>
+                    <span id="cartTotalValue">R$ 0,00</span>
+                </div>
+                <button class="btn-checkout" onclick="checkout()">Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="favModal" class="modal-overlay" onclick="closeOnOverlay(event, 'favModal')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Favoritos <i class="fas fa-heart" style="color:#e74c3c;"></i></h2>
+                <button class="btn-close" onclick="toggleModal('favModal', false)">&times;</button>
+            </div>
+            <div id="favItemsContainer" class="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal-overlay" onclick="closeOnOverlay(event, 'userModal')">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Área do Cliente <i class="fas fa-user-circle"></i></h2>
+                <button class="btn-close" onclick="toggleModal('userModal', false)">&times;</button>
+            </div>
+            <div class="modal-body" id="userModalBody"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Mensagem do sistema</div>
 
     <footer class="footer">
-        <div class="footer-content">
-            <h3>minmakes</h3>
-            
-            <div class="social-links">
-                <a href="#" class="social-icon tiktok" aria-label="TikTok">
-                    <i class="fab fa-tiktok"></i>
-                </a>
-                <a href="#" class="social-icon instagram" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-icon facebook" aria-label="Facebook">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" class="social-icon pinterest" aria-label="Pinterest">
-                    <i class="fab fa-pinterest-p"></i>
-                </a>
-            </div>
-
-            <p class="credits">Desenvolvido por <span>Yasmin</span></p>
+        <h3>MinMimei</h3>
+        <div class="social-links">
+            <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
         </div>
+        <p class="credits">Desenvolvido por <span>Yasmin</span></p>
     </footer>
 
     <script src="script.js"></script>
