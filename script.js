@@ -1,22 +1,3 @@
-const products = [
-    { id: 1, name: "Batom Matte", category: "boca", priceNumber: 39.90, price: "R$ 39,90", image: "Imagens/batom.png" },
-    { id: 2, name: "Base Líquida", category: "rosto", priceNumber: 69.90, price: "R$ 69,90", image: "Imagens/base.png" },
-    { id: 3, name: "Máscara de Cílios Volume", category: "olhos", priceNumber: 29.90, price: "R$ 29,90", image: "Imagens/rimel.jpg" },
-    { id: 4, name: "Paleta de Sombras Nude", category: "olhos", priceNumber: 35.90, price: "R$ 35,90", image: "Imagens/paletadecores.jpg" },
-    { id: 5, name: "Corretivo Cobertura Leve", category: "rosto", priceNumber: 35.90, price: "R$ 35,90", image: "Imagens/corretivoliquido.jpg" },
-    { id: 6, name: "Pó Translúcido HD", category: "rosto", priceNumber: 45.90, price: "R$ 45,90", image: "Imagens/po.jpg" },
-    { id: 7, name: "Iluminador Líquido Rosé", category: "rosto", priceNumber: 54.90, price: "R$ 54,90", image: "Imagens/iluminador.png" },
-    { id: 8, name: "Blush Cremoso Stick", category: "rosto", priceNumber: 42.90, price: "R$ 42,90", image: "Imagens/blush.png" },
-    { id: 9, name: "Gloss Labial Plump", category: "boca", priceNumber: 38.90, price: "R$ 38,90", image: "Imagens/gloss.png" },
-    { id: 10, name: "Delineador Precision Black", category: "olhos", priceNumber: 29.90, price: "R$ 29,90", image: "Imagens/delineador.png" },
-    { id: 11, name: "Primer Blur Polishing", category: "rosto", priceNumber: 54.90, price: "R$ 54,90", image: "Imagens/primer.png" },
-    { id: 12, name: "Kit Pincéis Pro (5 Pçs)", category: "acessorios", priceNumber: 99.90, price: "R$ 99,90", image: "Imagens/pinceis.png" },
-    { id: 13, name: "Bruma Fixadora Glow", category: "rosto", priceNumber: 52.90, price: "R$ 52,90", image: "Imagens/bruma.png" },
-    { id: 14, name: "Sombra Unitária Shimmer", category: "olhos", priceNumber: 24.90, price: "R$ 24,90", image: "Imagens/sombraunit.png" },
-    { id: 15, name: "Lip Oil Hidratante", category: "boca", priceNumber: 32.90, price: "R$ 32,90", image: "Imagens/lipoil.png" },
-    { id: 16, name: "Gel Fixador de Sobrancelha", category: "olhos", priceNumber: 27.90, price: "R$ 27,90", image: "Imagens/gelsobrancelha.png" }
-];
-
 // Estado do App
 let cart = [];
 let favorites = [];
@@ -28,49 +9,60 @@ document.addEventListener("DOMContentLoaded", () => {
     applyFilters();
 });
 
-// Renderizar Produtos
-function renderProducts(list) {
-    const grid = document.getElementById("productGrid");
-    grid.innerHTML = "";
-
-    if (list.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888;">Nenhum produto encontrado.</p>`;
-        return;
-    }
-
-    list.forEach(p => {
-        const isFav = favorites.includes(p.id);
-        const card = document.createElement("div");
-        card.className = "product-card";
-        card.innerHTML = `
-            <button class="fav-card-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(${p.id})">
-                <i class="fas fa-heart"></i>
-            </button>
-            <div class="card-img"><img src="${p.image}" alt="${p.name}"></div>
-            <div class="card-info">
-                <h3>${p.name}</h3>
-                <span class="price">${p.price}</span>
-                <button class="btn-buy" onclick="addToCart(${p.id})">Adicionar ao Carrinho</button>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
+// Auxiliar para pegar dados de um card pelo ID
+function getProductData(id) {
+    const card = document.querySelector(`.product-card[data-id="${id}"]`);
+    if (!card) return null;
+    return {
+        id: parseInt(card.dataset.id),
+        name: card.dataset.name,
+        category: card.dataset.category,
+        priceNumber: parseFloat(card.dataset.price),
+        price: `R$ ${parseFloat(card.dataset.price).toFixed(2).replace('.', ',')}`,
+        image: card.dataset.image
+    };
 }
 
-// Filtros & Busca
+// Filtros & Busca interagindo diretamente com os cards do HTML
 function applyFilters() {
     const query = document.getElementById("searchInput").value.toLowerCase();
     const category = document.getElementById("categoryFilter").value;
     const maxPrice = document.getElementById("priceFilter").value;
 
-    const filtered = products.filter(p => {
-        const matchesQuery = p.name.toLowerCase().includes(query);
-        const matchesCat = category === "all" || p.category === category;
-        const matchesPrice = maxPrice === "all" || p.priceNumber <= parseFloat(maxPrice);
-        return matchesQuery && matchesCat && matchesPrice;
+    const cards = document.querySelectorAll(".product-card");
+    let visibleCount = 0;
+
+    cards.forEach(card => {
+        const name = card.dataset.name.toLowerCase();
+        const cardCategory = card.dataset.category;
+        const price = parseFloat(card.dataset.price);
+
+        const matchesQuery = name.includes(query);
+        const matchesCat = category === "all" || cardCategory === category;
+        const matchesPrice = maxPrice === "all" || price <= parseFloat(maxPrice);
+
+        if (matchesQuery && matchesCat && matchesPrice) {
+            card.style.display = "flex";
+            visibleCount++;
+        } else {
+            card.style.display = "none";
+        }
     });
 
-    renderProducts(filtered);
+    const grid = document.getElementById("productGrid");
+    let noResultsMsg = document.getElementById("noResultsMsg");
+
+    if (visibleCount === 0) {
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement("p");
+            noResultsMsg.id = "noResultsMsg";
+            noResultsMsg.style.cssText = "grid-column: 1/-1; text-align: center; color: #888;";
+            noResultsMsg.textContent = "Nenhum produto encontrado.";
+            grid.appendChild(noResultsMsg);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
+    }
 }
 
 // Favoritos
@@ -79,8 +71,18 @@ function toggleFavorite(id) {
     if (idx > -1) favorites.splice(idx, 1);
     else favorites.push(id);
 
+    // Atualiza ícone do botão no card
+    const card = document.querySelector(`.product-card[data-id="${id}"]`);
+    if (card) {
+        const btn = card.querySelector(".fav-card-btn");
+        if (favorites.includes(id)) {
+            btn.classList.add("active");
+        } else {
+            btn.classList.remove("active");
+        }
+    }
+
     document.getElementById("favBadge").textContent = favorites.length;
-    applyFilters();
     renderFavModal();
 }
 
@@ -91,7 +93,7 @@ function renderFavModal() {
         return;
     }
 
-    const favProds = products.filter(p => favorites.includes(p.id));
+    const favProds = favorites.map(id => getProductData(id)).filter(p => p !== null);
     container.innerHTML = favProds.map(p => `
         <div class="cart-item">
             <img src="${p.image}" alt="${p.name}">
@@ -107,8 +109,14 @@ function renderFavModal() {
 // Carrinho
 function addToCart(id) {
     const item = cart.find(i => i.id === id);
-    if (item) item.quantity++;
-    else cart.push({ ...products.find(p => p.id === id), quantity: 1 });
+    if (item) {
+        item.quantity++;
+    } else {
+        const product = getProductData(id);
+        if (product) {
+            cart.push({ ...product, quantity: 1 });
+        }
+    }
 
     updateCart();
     showToast("Produto adicionado ao carrinho!");
@@ -132,14 +140,14 @@ function updateCart() {
                 <img src="${i.image}" alt="${i.name}">
                 <div style="flex-grow:1;">
                     <h4>${i.name}</h4>
-                    <p style="color:#d86979;">R$ ${(i.priceNumber * i.quantity).toFixed(2)}</p>
+                    <p style="color:#d86979;">R$ ${(i.priceNumber * i.quantity).toFixed(2).replace('.', ',')}</p>
                     <small>Qtd: ${i.quantity}</small>
                 </div>
             </div>
         `;
     }).join("");
 
-    document.getElementById("cartTotalValue").textContent = `R$ ${total.toFixed(2)}`;
+    document.getElementById("cartTotalValue").textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
 }
 
 function checkout() {

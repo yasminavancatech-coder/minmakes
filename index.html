@@ -63,7 +63,170 @@
         </div>
 
         <h2 class="section-title">Nossos Produtos</h2>
-        <div class="product-grid" id="productGrid"></div>
+        
+        <div class="product-grid" id="productGrid">
+            
+            <div class="product-card" data-id="1" data-name="Batom Matte" data-category="boca" data-price="39.90" data-image="Imagens/batom.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(1)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/batom.png" alt="Batom Matte"></div>
+                <div class="card-info">
+                    <h3>Batom Matte</h3>
+                    <span class="price">R$ 39,90</span>
+                    <button class="btn-buy" onclick="addToCart(1)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="2" data-name="Base Líquida" data-category="rosto" data-price="69.90" data-image="Imagens/base.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(2)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/base.png" alt="Base Líquida"></div>
+                <div class="card-info">
+                    <h3>Base Líquida</h3>
+                    <span class="price">R$ 69,90</span>
+                    <button class="btn-buy" onclick="addToCart(2)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="3" data-name="Máscara de Cílios Volume" data-category="olhos" data-price="29.90" data-image="Imagens/rimel.jpg">
+                <button class="fav-card-btn" onclick="toggleFavorite(3)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/rimel.jpg" alt="Máscara de Cílios Volume"></div>
+                <div class="card-info">
+                    <h3>Máscara de Cílios Volume</h3>
+                    <span class="price">R$ 29,90</span>
+                    <button class="btn-buy" onclick="addToCart(3)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="4" data-name="Paleta de Sombras Nude" data-category="olhos" data-price="35.90" data-image="Imagens/paletadecores.jpg">
+                <button class="fav-card-btn" onclick="toggleFavorite(4)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/paletadecores.jpg" alt="Paleta de Sombras Nude"></div>
+                <div class="card-info">
+                    <h3>Paleta de Sombras Nude</h3>
+                    <span class="price">R$ 35,90</span>
+                    <button class="btn-buy" onclick="addToCart(4)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="5" data-name="Corretivo Cobertura Leve" data-category="rosto" data-price="35.90" data-image="Imagens/corretivoliquido.jpg">
+                <button class="fav-card-btn" onclick="toggleFavorite(5)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/corretivoliquido.jpg" alt="Corretivo Cobertura Leve"></div>
+                <div class="card-info">
+                    <h3>Corretivo Cobertura Leve</h3>
+                    <span class="price">R$ 35,90</span>
+                    <button class="btn-buy" onclick="addToCart(5)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="6" data-name="Pó Translúcido HD" data-category="rosto" data-price="45.90" data-image="Imagens/po.jpg">
+                <button class="fav-card-btn" onclick="toggleFavorite(6)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/po.jpg" alt="Pó Translúcido HD"></div>
+                <div class="card-info">
+                    <h3>Pó Translúcido HD</h3>
+                    <span class="price">R$ 45,90</span>
+                    <button class="btn-buy" onclick="addToCart(6)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="7" data-name="Iluminador Líquido Rosé" data-category="rosto" data-price="54.90" data-image="Imagens/iluminador.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(7)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/iluminador.png" alt="Iluminador Líquido Rosé"></div>
+                <div class="card-info">
+                    <h3>Iluminador Líquido Rosé</h3>
+                    <span class="price">R$ 54,90</span>
+                    <button class="btn-buy" onclick="addToCart(7)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="8" data-name="Blush Cremoso Stick" data-category="rosto" data-price="42.90" data-image="Imagens/blush.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(8)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/blush.png" alt="Blush Cremoso Stick"></div>
+                <div class="card-info">
+                    <h3>Blush Cremoso Stick</h3>
+                    <span class="price">R$ 42,90</span>
+                    <button class="btn-buy" onclick="addToCart(8)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="9" data-name="Gloss Labial Plump" data-category="boca" data-price="38.90" data-image="Imagens/gloss.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(9)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/gloss.png" alt="Gloss Labial Plump"></div>
+                <div class="card-info">
+                    <h3>Gloss Labial Plump</h3>
+                    <span class="price">R$ 38,90</span>
+                    <button class="btn-buy" onclick="addToCart(9)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="10" data-name="Delineador Precision Black" data-category="olhos" data-price="29.90" data-image="Imagens/delineador.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(10)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/delineador.png" alt="Delineador Precision Black"></div>
+                <div class="card-info">
+                    <h3>Delineador Precision Black</h3>
+                    <span class="price">R$ 29,90</span>
+                    <button class="btn-buy" onclick="addToCart(10)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="11" data-name="Primer Blur Polishing" data-category="rosto" data-price="54.90" data-image="Imagens/primer.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(11)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/primer.png" alt="Primer Blur Polishing"></div>
+                <div class="card-info">
+                    <h3>Primer Blur Polishing</h3>
+                    <span class="price">R$ 54,90</span>
+                    <button class="btn-buy" onclick="addToCart(11)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="12" data-name="Kit Pincéis Pro (5 Pçs)" data-category="acessorios" data-price="99.90" data-image="Imagens/pinceis.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(12)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/pinceis.png" alt="Kit Pincéis Pro (5 Pçs)"></div>
+                <div class="card-info">
+                    <h3>Kit Pincéis Pro (5 Pçs)</h3>
+                    <span class="price">R$ 99,90</span>
+                    <button class="btn-buy" onclick="addToCart(12)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="13" data-name="Bruma Fixadora Glow" data-category="rosto" data-price="52.90" data-image="Imagens/bruma.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(13)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/bruma.png" alt="Bruma Fixadora Glow"></div>
+                <div class="card-info">
+                    <h3>Bruma Fixadora Glow</h3>
+                    <span class="price">R$ 52,90</span>
+                    <button class="btn-buy" onclick="addToCart(13)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="14" data-name="Sombra Unitária Shimmer" data-category="olhos" data-price="24.90" data-image="Imagens/sombraunit.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(14)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/sombraunit.png" alt="Sombra Unitária Shimmer"></div>
+                <div class="card-info">
+                    <h3>Sombra Unitária Shimmer</h3>
+                    <span class="price">R$ 24,90</span>
+                    <button class="btn-buy" onclick="addToCart(14)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="15" data-name="Lip Oil Hidratante" data-category="boca" data-price="32.90" data-image="Imagens/lipoil.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(15)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/lipoil.png" alt="Lip Oil Hidratante"></div>
+                <div class="card-info">
+                    <h3>Lip Oil Hidratante</h3>
+                    <span class="price">R$ 32,90</span>
+                    <button class="btn-buy" onclick="addToCart(15)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+            <div class="product-card" data-id="16" data-name="Gel Fixador de Sobrancelha" data-category="olhos" data-price="27.90" data-image="Imagens/gelsobrancelha.png">
+                <button class="fav-card-btn" onclick="toggleFavorite(16)"><i class="fas fa-heart"></i></button>
+                <div class="card-img"><img src="Imagens/gelsobrancelha.png" alt="Gel Fixador de Sobrancelha"></div>
+                <div class="card-info">
+                    <h3>Gel Fixador de Sobrancelha</h3>
+                    <span class="price">R$ 27,90</span>
+                    <button class="btn-buy" onclick="addToCart(16)">Adicionar ao Carrinho</button>
+                </div>
+            </div>
+
+        </div>
 
         <section id="politicas" class="policy-section">
             <h3><i class="fas fa-undo-alt"></i> Política de Troca e Devolução</h3>
@@ -84,46 +247,3 @@
             </div>
             <div id="cartItemsContainer" class="modal-body"></div>
             <div class="modal-footer">
-                <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
-                    <span>Total:</span>
-                    <span id="cartTotalValue">R$ 0,00</span>
-                </div>
-                <button class="btn-checkout" onclick="checkout()">Finalizar Compra</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="favModal" class="modal-overlay" onclick="closeOnOverlay(event, 'favModal')">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Favoritos <i class="fas fa-heart" style="color:#e74c3c;"></i></h2>
-                <button class="btn-close" onclick="toggleModal('favModal', false)">&times;</button>
-            </div>
-            <div id="favItemsContainer" class="modal-body"></div>
-        </div>
-    </div>
-
-    <div id="userModal" class="modal-overlay" onclick="closeOnOverlay(event, 'userModal')">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Área do Cliente <i class="fas fa-user-circle"></i></h2>
-                <button class="btn-close" onclick="toggleModal('userModal', false)">&times;</button>
-            </div>
-            <div class="modal-body" id="userModalBody"></div>
-        </div>
-    </div>
-
-    <div id="toast" class="toast">Mensagem do sistema</div>
-
-    <footer class="footer">
-        <h3>MinMimei</h3>
-        <div class="social-links">
-            <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
-            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        </div>
-        <p class="credits">Desenvolvido por <span>Yasmin</span></p>
-    </footer>
-
-    <script src="script.js"></script>
-</body>
-</html>
