@@ -56,7 +56,7 @@ function applyFilters() {
         if (!noResultsMsg) {
             noResultsMsg = document.createElement("p");
             noResultsMsg.id = "noResultsMsg";
-            noResultsMsg.style.cssText = "grid-column: 1/-1; text-align: center; color: #888;";
+            noResultsMsg.style.cssText = "grid-column: 1/-1; text-align: center; color: #888; font-size: 1.1rem; padding: 2rem 0;";
             noResultsMsg.textContent = "Nenhum produto encontrado.";
             grid.appendChild(noResultsMsg);
         }
@@ -71,7 +71,6 @@ function toggleFavorite(id) {
     if (idx > -1) favorites.splice(idx, 1);
     else favorites.push(id);
 
-    // Atualiza ícone do botão no card
     const card = document.querySelector(`.product-card[data-id="${id}"]`);
     if (card) {
         const btn = card.querySelector(".fav-card-btn");
@@ -89,7 +88,7 @@ function toggleFavorite(id) {
 function renderFavModal() {
     const container = document.getElementById("favItemsContainer");
     if (favorites.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#888;">Nenhum favorito ainda.</p>`;
+        container.innerHTML = `<p style="text-align:center; color:#888; margin-top:20px;">Nenhum favorito ainda.</p>`;
         return;
     }
 
@@ -106,16 +105,26 @@ function renderFavModal() {
     `).join("");
 }
 
-// Carrinho
+// Carrinho com suporte a variações
 function addToCart(id) {
-    const item = cart.find(i => i.id === id);
-    if (item) {
-        item.quantity++;
+    const product = getProductData(id);
+    if (!product) return;
+
+    // Busca o seletor da opção caso o produto possua variações
+    const variantSelect = document.getElementById(`variant-${id}`);
+    const selectedVariant = variantSelect ? variantSelect.value : null;
+
+    // Localiza se a mesma variação do mesmo produto já está no carrinho
+    const existingItem = cart.find(item => item.id === id && item.variant === selectedVariant);
+
+    if (existingItem) {
+        existingItem.quantity++;
     } else {
-        const product = getProductData(id);
-        if (product) {
-            cart.push({ ...product, quantity: 1 });
-        }
+        cart.push({
+            ...product,
+            variant: selectedVariant,
+            quantity: 1
+        });
     }
 
     updateCart();
@@ -127,21 +136,22 @@ function updateCart() {
     const container = document.getElementById("cartItemsContainer");
     
     if (cart.length === 0) {
-        container.innerHTML = `<p style="text-align:center; color:#888;">Carrinho vazio.</p>`;
+        container.innerHTML = `<p style="text-align:center; color:#888; margin-top:20px;">Carrinho vazio.</p>`;
         document.getElementById("cartTotalValue").textContent = "R$ 0,00";
         return;
     }
 
     let total = 0;
-    container.innerHTML = cart.map(i => {
+    container.innerHTML = cart.map((i, index) => {
         total += i.priceNumber * i.quantity;
         return `
             <div class="cart-item">
                 <img src="${i.image}" alt="${i.name}">
                 <div style="flex-grow:1;">
                     <h4>${i.name}</h4>
-                    <p style="color:#d86979;">R$ ${(i.priceNumber * i.quantity).toFixed(2).replace('.', ',')}</p>
-                    <small>Qtd: ${i.quantity}</small>
+                    ${i.variant ? `<span class="cart-variant-tag">${i.variant}</span>` : ''}
+                    <p style="color:#d86979; font-weight:bold;">R$ ${(i.priceNumber * i.quantity).toFixed(2).replace('.', ',')}</p>
+                    <small style="color:#666;">Qtd: ${i.quantity}</small>
                 </div>
             </div>
         `;
@@ -152,11 +162,9 @@ function updateCart() {
 
 function checkout() {
     if (cart.length === 0) return alert("Carrinho vazio!");
-    
     if (currentUser) {
         orderHistory.push({ date: new Date().toLocaleDateString(), items: [...cart] });
     }
-
     alert("Compra realizada com sucesso!");
     cart = [];
     updateCart();
@@ -172,27 +180,24 @@ function openUserModal() {
                 <h3>Entrar na Conta</h3>
                 <input type="email" id="loginEmail" placeholder="E-mail">
                 <input type="password" id="loginPass" placeholder="Senha">
-                <button onclick="login()">Entrar</button>
-                <hr style="margin:10px 0; border:none; border-top:1px solid #eee;">
-                <p style="font-size:0.85rem; text-align:center;">Não tem conta? Digite seu nome e entre!</p>
+                <button class="btn-buy" onclick="login()">Entrar</button>
             </div>
         `;
     } else {
         body.innerHTML = `
-            <div class="user-profile-info">
-                <h3>Olá, ${currentUser.name}!</h3>
-                <p style="color:#666; font-size:0.9rem;">${currentUser.email}</p>
-                <button onclick="logout()" style="margin-top:10px; background:#e74c3c; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Sair</button>
-            </div>
-            <h4 style="margin:15px 0 10px 0;">Histórico de Compras</h4>
-            <div>
-                ${orderHistory.length === 0 ? '<p style="color:#888; font-size:0.85rem;">Nenhuma compra anterior.</p>' : orderHistory.map(o => `
+            <h3>Olá, ${currentUser.name}!</h3>
+            <p style="margin-bottom:15px; color:#666;">${currentUser.email}</p>
+            <h4>Histórico de Pedidos:</h4>
+            <div style="margin-top:10px;">
+                ${orderHistory.length === 0 ? '<p style="font-size:0.9rem; color:#888;">Nenhum pedido realizado.</p>' : 
+                orderHistory.map(h => `
                     <div class="history-item">
-                        <strong>Data: ${o.date}</strong>
-                        <p style="font-size:0.85rem; color:#555;">${o.items.map(i => `${i.quantity}x ${i.name}`).join(", ")}</p>
+                        <small style="color:#888;">Data: ${h.date}</small>
+                        <p style="font-size:0.85rem; margin-top:4px;">${h.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</p>
                     </div>
-                `).join("")}
+                `).join('')}
             </div>
+            <button class="btn-buy" style="background:#e74c3c; margin-top:15px;" onclick="logout()">Sair</button>
         `;
     }
     toggleModal('userModal', true);
@@ -200,22 +205,25 @@ function openUserModal() {
 
 function login() {
     const email = document.getElementById("loginEmail").value;
-    if (!email) return alert("Informe seu e-mail!");
-    
-    currentUser = { name: email.split("@")[0], email };
-    document.getElementById("userNavLabel").textContent = currentUser.name;
-    openUserModal();
+    if (email) {
+        currentUser = { name: email.split('@')[0], email };
+        document.getElementById("userNavLabel").textContent = currentUser.name;
+        openUserModal();
+        showToast("Login realizado com sucesso!");
+    }
 }
 
 function logout() {
     currentUser = null;
     document.getElementById("userNavLabel").textContent = "Entrar";
-    openUserModal();
+    toggleModal('userModal', false);
+    showToast("Você saiu da conta.");
 }
 
-// Modais / Utils
+// Modal & Utilitários
 function toggleModal(id, show) {
-    document.getElementById(id).classList.toggle("active", show);
+    const modal = document.getElementById(id);
+    if (modal) modal.classList.toggle("active", show);
 }
 
 function closeOnOverlay(e, id) {
@@ -229,19 +237,47 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove("show"), 3000);
 }
 
+// Alternar Tema Escuro / Claro
+function toggleTheme() {
+    const isDark = document.body.classList.toggle("dark-mode");
+    const icon = document.getElementById("themeIcon");
+
+    if (icon) {
+        if (isDark) {
+            icon.classList.remove("fa-moon");
+            icon.classList.add("fa-sun");
+        } else {
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+        }
+    }
+}
+
+// Animação da Chuva de Batons (💄) e Laçinhos (🎀)
 function createLipstickRain() {
     let container = document.getElementById("lipstick-rain-container") || document.createElement("div");
     container.id = "lipstick-rain-container";
     document.body.prepend(container);
 
-    for (let i = 0; i < 40; i++) {
-        const l = document.createElement("span");
-        l.className = "falling-lipstick";
-        l.innerHTML = "💄";
-        l.style.left = `${Math.random() * 98}vw`;
-        l.style.animationDuration = `${Math.random() * 6 + 4}s`;
-        l.style.animationDelay = `${Math.random() * 8}s`;
-        l.style.fontSize = `${Math.random() * 20 + 25}px`;
-        container.appendChild(l);
+    for (let i = 0; i < 22; i++) {
+        const item = document.createElement("span");
+        item.className = "falling-lipstick";
+        item.innerHTML = "💄";
+        item.style.left = `${Math.random() * 98}vw`;
+        item.style.animationDuration = `${Math.random() * 5 + 5}s`;
+        item.style.animationDelay = `${Math.random() * 7}s`;
+        item.style.fontSize = `${Math.random() * 10 + 20}px`;
+        container.appendChild(item);
+    }
+
+    for (let i = 0; i < 35; i++) {
+        const item = document.createElement("span");
+        item.className = "falling-bow";
+        item.innerHTML = "🎀";
+        item.style.left = `${Math.random() * 98}vw`;
+        item.style.animationDuration = `${Math.random() * 6 + 6}s`;
+        item.style.animationDelay = `${Math.random() * 8}s`;
+        item.style.fontSize = `${Math.random() * 12 + 18}px`;
+        container.appendChild(item);
     }
 }
